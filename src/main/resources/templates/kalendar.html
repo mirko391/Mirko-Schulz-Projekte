@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <!-- Link to external CSS -->
+    <link href="../static/kalendar.css" rel="stylesheet">
+    <title>Kalender</title>
+    <meta content="${_csrf.token}" name="_csrf"/>
+    <meta content="${_csrf.headerName}" name="_csrf_header"/>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.css' rel='stylesheet'/>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.9.0/locales/de.js'></script>
+    <link rel="stylesheet" th:href="@{/css/kalendar.css}">
+</head>
+<body>
+
+<!-- Sidebar on the left -->
+<div class="sidebar">
+    <!-- Logo Section -->
+    <div class="logo">
+        <img alt="Logo" class="logo-image" th:src="@{/images/mischok@cademy.png}">
+    </div>
+    <h3><a th:text="#{menu.menu}">"Menü</a></h3>
+    <a th:href="@{/dashboard}" class="menu-link" th:text="#{menu.home}">>Dashboard</a>
+    <a th:href="@{/kalendar}" class="menu-link" th:text="#{menu.kalender}">Kalender</a>
+    <a th:href="@{/uebersicht}" class="menu-link" th:text="#{menu.uebersicht}">Übersicht</a>
+    <a th:href="@{/lernplan}" class="menu-link" th:text="#{menu.lernplan}">Lernplan</a>
+    <a th:href="@{/projekt}" class="menu-link" th:text="#{menu.projekt}">Projekt</a>
+    <a th:href="@{/user}" class="menu-link" th:text="#{menu.user}">User</a>
+</div>
+
+<div class="main-content">
+    <div class="header">
+        <h1></h1> <!-- Header updated to Kalendar -->
+        <div class="title-container">
+            <div class="center-title"><a th:text="#{menu.kalender}">Kalender</a></div> <!-- Center title updated to Kalendar -->
+        </div>
+
+        <form action="/kalendar" method="get">
+            <select name="lang" onchange="this.form.submit()">
+                <option value="de" th:selected="${#locale.language == 'de'}">Deutsch</option>
+                <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+                <option value="hr" th:selected="${#locale.language == 'hr'}">Kroatisch</option>
+                <option value="uk" th:selected="${#locale.language == 'uk'}">Ukrainisch</option>
+            </select>
+        </form>
+
+        <!-- Logout button -->
+        <form method="post" th:action="@{/logout}">
+            <button class="logout" type="submit">Logout</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <!-- Linke Seite: Kalender -->
+        <div id="calendar-container">
+            <div id="calendar"></div>
+        </div>
+
+        <!-- Rechte Seite: Todo-Details -->
+        <div id="todo-details" style="display: none;">
+            <h3>Todo Details</h3>
+            <p><strong>Titel:</strong> <span id="detail-title">—</span></p>
+            <p><strong>Beschreibung:</strong> <span id="detail-description">—</span></p>
+            <p><strong>Startdatum:</strong> <span id="detail-start">—</span></p>
+            <p><strong>Fälligkeitsdatum:</strong> <span id="detail-end">—</span></p>
+            <p><strong>Status:</strong> <span id="detail-status">—</span></p>
+            <button id="deleteTodo">Todo löschen</button>
+            <button onclick="document.getElementById('todo-details').style.display='none';">Schließen</button>
+        </div>
+    </div>
+
+    <div class="todo-form">
+        <h3><a th:text="#{cal.new}"></a></h3>
+        <form action="/api/todos" id="todoForm" method="POST">
+            <label for="todoTitel"><a th:text="#{cal.title}"></a></label>
+            <input id="todoTitel" name="titel" required type="text">
+
+            <label for="todoStart"><a th:text="#{cal.start}"></a></label>
+            <input id="todoStart" name="start" required type="date">
+
+            <label for="todoEnde"><a th:text="#{cal.end}"></a></label>
+            <input id="todoEnde" name="ende" type="date">
+
+            <label for="todoStatus"><a th:text="#{cal.status}"></a></label>
+            <select id="todoStatus" name="status" required>
+                <option value="Offen">Offen</option>
+                <option value="In Bearbeitung">In Bearbeitung</option>
+                <option value="Abgeschlossen">Abgeschlossen</option>
+            </select>
+
+            <!-- Drop-down für Projektzuweisung -->
+            <label for="todoProjekt"><a th:text="#{cal.project}"></a></label>
+            <select id="todoProjekt" name="projektId">
+                <option value="">Kein Projekt</option>
+            </select>
+
+            <!-- Drop-down für Lernplanzuweisung -->
+            <label for="todoLernplan"><a th:text="#{cal.lern}"></a></label>
+            <select id="todoLernplan" name="lernplanId">
+                <option value="">Kein Lernplan</option>
+            </select>
+
+            <button type="submit"><a th:text="#{cal.button}"></a></button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let currentTodoId = null; // Globale Variable für die aktuelle Todo-ID
+        const currentPersonId = [[${#authentication.principal.personid}]]; // Aktuelle Benutzer-ID
+
+    // Kalender-Element abrufen
+    const calendarEl = document.getElementById('calendar');
+
+    // FullCalendar initialisieren
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'de',
+        editable: true, // Ermöglicht Drag-and-Drop für Events
+        events: '/api/todos', // Todos aus der API laden
+
+        // Event-Klick-Handler: Zeigt Todo-Details an
+        eventClick: function(info) {
+            const todo = {
+                id: info.event.id,
+                titel: info.event.title,
+                beschreibung: info.event.extendedProps.beschreibung|| "Keine Beschreibung vorhanden.",
+                start: info.event.start ? info.event.start.toLocaleDateString('de-DE') : "—",
+                ende: info.event.end ? info.event.end.toLocaleDateString('de-DE') : "—",
+                status: info.event.extendedProps.status || "Unbekannt"
+            };
+            showTodoDetails(todo);
+        },
+
+        // Event-Verschiebung (Drag-and-Drop)
+        eventDrop: function(info) {
+            if (!confirm("Bist du sicher, dass du dieses Event verschieben möchtest?")) {
+                info.revert(); // Zurücksetzen, falls nicht bestätigt
+                return;
+            }
+
+            // Neues Start- und Enddatum aktualisieren
+            const newStart = info.event.start.toLocaleDateString('sv-SE');
+            const newEnd = info.event.end
+            ? info.event.end.toLocaleDateString('sv-SE')
+            : newStart;
+
+            fetch(`/api/todos/${info.event.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    start: newStart,
+                    ende: newEnd
+                })
+            })
+                .then(response => {
+                if (!response.ok) {
+                    throw new Error('Fehler beim Aktualisieren des Todos.');
+                }
+            })
+                .catch(error => {
+                console.error('Fehler:', error);
+                info.revert(); // Zurücksetzen bei Fehler
+            });
+        },
+
+        // Klick auf leeren Kalender-Tag, um ein neues Todo zu erstellen
+        dateClick: function(info) {
+            const title = prompt('Titel des Todos:');
+            if (title) {
+                fetch('/api/todos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        titel: title,
+                        start: info.dateStr,
+                        ende: info.dateStr,
+                        person: currentPersonId,
+                        status: "Offen"
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                    calendar.addEvent({
+                        id: data.todoid,
+                        title: data.titel,
+                        start: data.start,
+                        end: data.ende
+                    });
+                })
+                    .catch(error => console.error('Fehler beim Hinzufügen des Todos:', error));
+            }
+        }
+    });
+
+    // Kalender rendern
+    calendar.render();
+
+    // Todo-Formular absenden
+    document.getElementById('todoForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Standardformularabsenden verhindern
+
+        const todoData = {
+            titel: document.getElementById('todoTitel').value,
+            start: document.getElementById('todoStart').value,
+            ende: document.getElementById('todoEnde').value,
+            status: document.getElementById('todoStatus').value,
+            projektid: document.getElementById('todoProjekt').value,
+            lernplanid: document.getElementById('todoLernplan').value,
+            person: currentPersonId
+        };
+
+        fetch('/api/todos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(todoData)
+        })
+            .then(response => response.json())
+            .then(data => {
+            calendar.addEvent({
+                id: data.todoid,
+                title: data.titel,
+                start: data.start,
+                end: data.ende
+            });
+            document.getElementById('todoForm').reset(); // Formular zurücksetzen
+        })
+            .catch(error => console.error('Fehler beim Erstellen des Todos:', error));
+    });
+
+    // Projekte und Lernpläne laden und Drop-down-Menüs füllen
+    fetch('/api/todos/userdata/projects-and-plans')
+        .then(response => response.json())
+        .then(data => {
+        const projektSelect = document.getElementById('todoProjekt');
+        const lernplanSelect = document.getElementById('todoLernplan');
+
+        // Projekte hinzufügen
+        data.projekte.forEach(projekt => {
+            const option = document.createElement('option');
+            option.value = projekt.projektId;
+            option.text = projekt.titel;
+            projektSelect.appendChild(option);
+        });
+
+        // Lernpläne hinzufügen
+        data.lernplaene.forEach(lernplan => {
+            const option = document.createElement('option');
+            option.value = lernplan.lernplanId;
+            option.text = lernplan.titel;
+            lernplanSelect.appendChild(option);
+        });
+    })
+        .catch(error => console.error('Fehler beim Laden von Projekten und Lernplänen:', error));
+
+    // Funktion: Todo-Details anzeigen
+    function showTodoDetails(todo) {
+        currentTodoId = todo.id || null; // Todo-ID speichern
+        document.getElementById("todo-details").style.display = "block"; // Detailbereich anzeigen
+        document.getElementById("detail-title").textContent = todo.titel || "—";
+        document.getElementById("detail-description").textContent = todo.beschreibung || "—";
+        document.getElementById("detail-start").textContent = todo.start || "—";
+        document.getElementById("detail-end").textContent = todo.ende || "—";
+        document.getElementById("detail-status").textContent = todo.status || "—";
+    }
+
+    // Funktion: Todo löschen
+    document.getElementById("deleteTodo").addEventListener('click', function() {
+        if (!currentTodoId) {
+            alert("Kein Todo ausgewählt.");
+            return;
+        }
+
+        if (confirm("Möchtest du dieses Todo wirklich löschen?")) {
+            fetch(`/api/todos/${currentTodoId}`, { method: "DELETE" })
+                .then(response => {
+                if (!response.ok) {
+                    throw new Error("Fehler beim Löschen des Todos.");
+                }
+                alert("Todo erfolgreich gelöscht.");
+                location.reload(); // Seite neu laden oder manuell Event entfernen
+            })
+                .catch(error => console.error("Fehler beim Löschen des Todos:", error));
+        }
+    });
+
+    // Funktion: Todo-Details schließen
+    document.getElementById("todo-details").querySelector("button[onclick='hideTodoDetails()']").addEventListener('click', function() {
+        document.getElementById("todo-details").style.display = "none"; // Detailbereich ausblenden
+    });
+    });
+</script>
+</body>
+</html>

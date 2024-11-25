@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lernplan Details</title>
+  <link rel="stylesheet" th:href="@{/css/lernplan.css}">
+</head>
+<body>
+<div class="sidebar">
+  <div class="logo">
+    <img th:src="@{/images/mischok@cademy.png}" alt="Logo" class="logo-image">
+  </div>
+  <h3><a th:text="#{menu.menu}">"Menü</a></h3>
+  <a th:href="@{/dashboard}" class="menu-link" th:text="#{menu.home}">>Dashboard</a>
+  <a th:href="@{/kalendar}" class="menu-link" th:text="#{menu.kalender}">Kalender</a>
+  <a th:href="@{/uebersicht}" class="menu-link" th:text="#{menu.uebersicht}">Übersicht</a>
+  <a th:href="@{/lernplan}" class="menu-link" th:text="#{menu.lernplan}">Lernplan</a>
+  <a th:href="@{/projekt}" class="menu-link" th:text="#{menu.projekt}">Projekt</a>
+  <a th:href="@{/user}" class="menu-link" th:text="#{menu.user}">User</a>
+</div>
+
+<div class="main-content">
+  <div class="header">
+    <div class="title-container">
+      <div class="center-title"><a th:text="#{lern.details}">Lernplan Edit</a></div>
+    </div>
+
+    <form th:action="@{/lernplan/{id}(id=${id})}" method="get">
+      <select name="lang" onchange="this.form.submit()">
+        <option value="de" th:selected="${#locale.language == 'de'}">Deutsch</option>
+        <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+        <option value="hr" th:selected="${#locale.language == 'hr'}">Kroatisch</option>
+        <option value="uk" th:selected="${#locale.language == 'uk'}">Ukrainisch</option>
+      </select>
+    </form>
+
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="logout">Logout</button>
+    </form>
+  </div>
+
+  <div class="content">
+    <h2><a th:text="#{lern.name}"></a><span th:text="${lernplan.titel}"></span></h2>
+    <p><strong><a th:text="#{cal.start}">Start Date:</a></strong> <span th:text="${lernplan.start}"></span></p>
+    <p><strong><a th:text="#{cal.end}">End Date:</a></strong> <span th:text="${lernplan.ende}"></span></p>
+
+    <h3><a th:text="#{lern.todos}">Todos</a></h3>
+    <table>
+      <thead>
+      <tr>
+        <th><a th:text="#{cal.title}">Todo Titel</a></th>
+        <th><a th:text="#{dash.disc}">Beschreibung</a></th>
+        <th><a th:text="#{cal.status}">Status</a></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="todo : ${todos}">
+        <td th:text="${todo.titel}"></td>
+        <td th:text="${todo.beschreibung}"></td>
+        <td th:text="${todo.status}"></td>
+      </tr>
+      </tbody>
+    </table>
+    <br>
+    <a th:href="@{/lernplan}" th:text="#{lern.back}">Zurück zur Übersicht</a>
+  </div>
+</div>
+</body>
+</html>

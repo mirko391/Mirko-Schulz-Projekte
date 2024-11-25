@@ -1,0 +1,61 @@
+/* Grundlegende Stile für den Body */
+body {
+    font-family: 'Poppins', sans-serif; /* Moderne Schriftart */
+    background-color: #f5f5f5; /* Sanfter Hintergrund */
+    margin: 0;
+    padding: 0;
+    background: url('/images/sidebar-kalender.jpg') no-repeat center center/cover; /* Hintergrundbild */
+    height: 100vh; /* Hintergrund soll den gesamten Viewport abdecken */
+    display: flex; /* Flexbox für vertikale Zentrierung */
+    justify-content: center; /* Horizontale Zentrierung */
+    align-items: center; /* Vertikale Zentrierung */
+    color: #333; /* Standard Textfarbe */
+}
+
+/* Stil für das Fehlerbox-Div */
+.errorBox {
+    background: url('/images/logout-button.jpg') no-repeat center center/cover; /* Hintergrundbild */
+    color: white; /* Weißer Text */
+    padding: 40px 30px; /* Mehr Padding für besseren Abstand */
+    border-radius: 15px; /* Abgerundete Ecken */
+    text-align: center; /* Textzentrierung */
+    width: 90%; /* Breite dynamisch, damit es auf mobilen Geräten passt */
+    max-width: 600px; /* Maximale Breite für größere Bildschirme */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Schatten für einen 3D-Effekt */
+    transition: all 0.3s ease-in-out; /* Sanfter Übergang für Hover-Effekte */
+}
+
+.errorBox h1 {
+    font-size: 2.5rem; /* Größerer Titel */
+    margin-bottom: 20px; /* Abstand zum Text */
+}
+
+.errorBox p {
+    font-size: 1.2rem; /* Etwas größere Schriftgröße */
+    line-height: 1.6; /* Mehr Zeilenhöhe für bessere Lesbarkeit */
+    margin-bottom: 20px; /* Abstand zwischen Absätzen */
+}
+
+/* Optional: Hover-Effekt für die Box */
+.errorBox:hover {
+    transform: scale(1.05); /* Vergrößert die Box bei Hover */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Erhöht den Schatten bei Hover */
+}
+
+/* Stil für den Link */
+.errorBox a {
+    font-size: 1.2rem;
+    color: #fff; /* Weißer Text für den Link */
+    text-decoration: none; /* Keine Unterstreichung */
+    background-color: #28a745; /* Grüner Hintergrund für den Link */
+    padding: 10px 20px; /* Etwas Padding */
+    border-radius: 5px; /* Abgerundete Ecken */
+    margin-top: 20px; /* Abstand nach oben */
+    display: inline-block; /* Damit der Link als Block sichtbar ist */
+    transition: background-color 0.3s ease; /* Sanfter Übergang beim Hover */
+}
+
+/* Link Hover-Effekt */
+.errorBox a:hover {
+    background-color: #218838; /* Dunkleres Grün beim Hover */
+}

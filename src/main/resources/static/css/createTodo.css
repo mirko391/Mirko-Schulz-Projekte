@@ -1,0 +1,155 @@
+/* General styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: url('/images/sidebar.jpg') no-repeat center;
+    background-size: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.center-title {
+    font-size: 28px;
+    color: #fff;
+    font-weight: bold;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.logout {
+    background-color: #1E73A7; /* Use the color instead of the image */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.logout:hover {
+    background-color: #5561e7; /* Background color on hover for logout button */
+    transform: scale(1.05);
+}
+
+/* Sidebar */
+.sidebar {
+    height: 100vh;
+    width: 240px;
+    position: fixed;
+    padding-top: 40px;
+    background: url('/images/sidebar.jpg') no-repeat center;
+    background-size: cover;
+    color: white;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+}
+
+.sidebar .logo img {
+    width: 60%;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.sidebar h3 {
+    font-size: 22px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.sidebar a {
+    display: block;
+    color: #fff;
+    padding: 12px 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    margin: 5px 0;
+    text-decoration: none;
+    transition: background-color 0.3s, padding-left 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #4A5568;
+    padding-left: 25px;
+}
+
+/* Main content */
+.main-content {
+    margin-left: 260px;
+    padding: 40px;
+    background-color: #ffffffa8;
+    border-radius: 10px;
+}
+
+/* Content form styling */
+.content h2 {
+    font-size: 24px;
+    color: #1e3a5f;
+    margin-bottom: 20px;
+}
+
+.todo-form label {
+    display: block;
+    margin: 15px 0 5px;
+}
+
+.todo-form input,
+.todo-form select,
+.todo-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #4A5568;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #2D3748;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .header {
+        padding: 10px;
+    }
+
+    .center-title {
+        font-size: 24px;
+    }
+
+    .logout {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+}

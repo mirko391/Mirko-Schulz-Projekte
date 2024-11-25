@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrierung Liste</title>
+  <link rel="stylesheet" href="/css/registration.css">
+</head>
+<body>
+
+<h1>Registrierung</h1>
+<div class="registration-container">
+  <div class="registration-box">
+    <!-- Registration Form with Thymeleaf bindings -->
+    <form th:action="@{/registration}" method="post" th:object="${user}">
+      <div class="input-container">
+        <label> Benutzername(Login): <br>
+          <input type="text" th:field="*{username}" required/>
+        </label>
+      </div>
+      <div class="input-container">
+        <label> Name: <br>
+          <input type="text" th:field="*{name}" required/>
+        </label>
+      </div>
+      <div class="input-container">
+        <label> Passwort: <br>
+          <input type="password" th:field="*{passwort}" required/>
+        </label>
+      </div>
+      <div class="input-container">
+        <label> Email: <br>
+          <input type="email" th:field="*{email}" required/>
+        </label>
+      </div>
+      <button type="submit" class="button">registrieren</button>
+    </form>
+
+    <br>
+    <a th:href="@{/}">Zurück zur Startseite</a>
+  </div>
+</div>
+</body>
+</html>

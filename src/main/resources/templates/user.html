@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User</title>
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" th:href="@{/css/user.css}">
+</head>
+<body>
+<!-- Sidebar on the left -->
+<div class="sidebar">
+    <div class="logo">
+        <img th:src="@{/images/mischok@cademy.png}" alt="Logo" class="logo-image">
+    </div>
+    <h3><a th:text="#{menu.menu}">"Menü</a></h3>
+    <a th:href="@{/dashboard}" class="menu-link" th:text="#{menu.home}">>Dashboard</a>
+    <a th:href="@{/kalendar}" class="menu-link" th:text="#{menu.kalender}">Kalender</a>
+    <a th:href="@{/uebersicht}" class="menu-link" th:text="#{menu.uebersicht}">Übersicht</a>
+    <a th:href="@{/lernplan}" class="menu-link" th:text="#{menu.lernplan}">Lernplan</a>
+    <a th:href="@{/projekt}" class="menu-link" th:text="#{menu.projekt}">Projekt</a>
+    <a th:href="@{/user}" class="menu-link" th:text="#{menu.user}">User</a>
+</div>
+
+<!-- Main content section with flexbox layout -->
+<div class="main-content">
+    <div class="header">
+        <h1></h1> <!-- Header updated to Kalendar -->
+        <div class="title-container">
+            <div class="center-title">User</div> <!-- Center title updated to Kalendar -->
+        </div>
+
+        <form action="/user" method="get">
+            <select name="lang" onchange="this.form.submit()">
+                <option value="de" th:selected="${#locale.language == 'de'}">Deutsch</option>
+                <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+                <option value="hr" th:selected="${#locale.language == 'hr'}">Kroatisch</option>
+                <option value="uk" th:selected="${#locale.language == 'uk'}">Ukrainisch</option>
+            </select>
+        </form>
+
+        <!-- Logout button -->
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout">Logout</button>
+        </form>
+    </div>
+
+    <!-- Container for user-info and user-form -->
+    <div class="user-container">
+        <!-- User Form Section (now first) -->
+        <div class="user-form-container">
+            <form class="user-form" th:action="@{/user/edit}" method="post">
+                <div>
+                    <label for="username"><a th:text="#{user.newname}">Neuer Benutzername:</a></label>
+                    <input type="text" id="username" name="username" th:value="${user.username}">
+                </div>
+                <div>
+                    <label for ="passwort"><a th:text="#{user.password}">Neues Passwort:</a></label>
+                    <input type="password" id="passwort" name="passwort" th:value="${user.passwort}">
+                </div>
+                <div>
+                    <label for="email"><a th:text="#{user.newemail}">Neue Email:</a></label>
+                    <input type="email" id="email" name="email" th:value="${user.email}">
+                </div>
+                <div>
+                    <label for="name"><a th:text="#{user.newrealname}">Neuer vollständiger Name:</a></label>
+                    <input type="text" id="name" name="name" th:value="${user.name}">
+                </div>
+                <div>
+                    <button type="submit"><a th:text="#{button.save}">Änderungen speichern</a></button>
+                </div>
+            </form>
+        </div>
+
+        <!-- User Info Section (now second) -->
+        <div class="user-info">
+            <p><a th:text="#{user.username}">Benutzername:</a><span th:text="${user.username}">Username</span></p>
+            <div hidden>
+                <p>Passwort: <span th:text="${user.passwort}">Passwort</span></p>
+            </div>
+            <p><a th:text="#{user.email}">Email:</a> <span th:text="${user.email}">Email</span></p>
+            <p><a th:text="#{user.realname}">Vollständiger Name: </a><span th:text="${user.name}">Name</span></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

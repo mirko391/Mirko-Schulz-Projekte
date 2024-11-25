@@ -1,0 +1,339 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    background: url('/images/background.jpg'); /* Path to your background image */
+    background-size: cover; /* Ensures the image covers the entire background */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    height: 100vh; /* Ensures the background covers the full viewport */
+}
+
+/* Linke Navigationsleiste */
+.sidebar {
+    height: 80vh;
+    width: 240px; /* Width of the sidebar */
+    background: url('/images/sidebar.jpg'); /* Path to your sidebar background image */
+    background-size: cover; /* Ensures the sidebar background covers the entire area */
+    background-position: center; /* Centers the sidebar background image */
+    background-repeat: no-repeat; /* Prevents the sidebar background from repeating */
+    padding-top: 40px;
+    padding: 20px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 20px; /* Rounded corners on all sides */
+    margin: 40px 0; /* Move the sidebar down from the center */
+}
+
+.sidebar .logo {
+    margin-bottom: 30px; /* Space below logo */
+    text-align: center;
+}
+
+.sidebar .logo img {
+    width: 60%; /* Logo image width */
+}
+
+/* Menu Header */
+.sidebar h3 {
+    color: #fff;
+    margin-bottom: 20px; /* Reduced space below the heading */
+    font-size: 22px; /* Font size for the menu header */
+    font-weight: bold;
+    text-align: center; /* Center the menu heading */
+}
+
+/* Link Styles */
+.sidebar a {
+    padding: 12px 15px; /* Adjusted padding for a cleaner look */
+    text-decoration: none;
+    font-size: 16px; /* Slightly smaller font size */
+    font-weight: 500; /* Slightly bolder */
+    color: #fff; /* Link text color */
+    display: block;
+    transition: background-color 0.3s, padding-left 0.3s;
+    border-radius: 10px; /* Rounded corners for links */
+    margin: 5px 0; /* Margin below each link */
+    position: relative; /* Needed for pseudo-elements */
+}
+
+.sidebar a:not(:last-child)::after {
+    content: ''; /* Create a pseudo-element */
+    display: block;
+    height: 1px; /* Height of the line */
+    background: rgba(255, 255, 255, 0.5); /* Line color */
+    position: absolute; /* Position it relative to the link */
+    left: 0; /* Align to the left */
+    right: 0; /* Align to the right */
+    bottom: 0; /* Position at the bottom */
+    border-radius: 5px; /* Rounded corners for the line */
+}
+
+
+.sidebar a:hover {
+    background-color: #4A5568; /* Background color on hover */
+    padding-left: 25px; /* Adjusted for a smoother transition */
+}
+
+/* Hauptinhalt */
+.main-content {
+    margin-left: 260px; /* Ensures content starts after the 240px wide sidebar */
+    padding: 40px;
+    max-width: calc(100% - 240px); /* Adjust the width to account for sidebar */
+    background-color: #ffffffa8; /* Background color for the main content */
+    min-height: 100vh; /* Minimum height for main content */
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px; /* Slight rounding for the main content */
+}
+
+/* Header */
+.header {
+    background: url('/images/sidebar.jpg'); /* Path to your sidebar background image */
+    background-size: cover; /* Ensures the sidebar background covers the entire area */
+    background-position: center; /* Centers the sidebar background image */
+    background-repeat: no-repeat; /* Prevents the sidebar background from repeating */
+    padding: 20px; /* Padding inside header */
+    border-radius: 10px; /* Rounded corners for header */
+    display: flex;
+    align-items: center; /* Center items vertically */
+    margin-bottom: 20px; /* Space below header */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Shadow effect for header */
+}
+
+.header h1 {
+    font-size: 24px; /* Font size for header title */
+    color: #333; /* Text color for header title */
+    margin-right: auto; /* Pushes title to the left */
+}
+
+.header .title-container {
+    flex-grow: 1; /* Allows the title container to grow */
+    display: flex;
+    justify-content: center; /* Centers the title */
+}
+
+.header .center-title {
+    font-family: 'Courier New', Courier, monospace; /* Font for center title */
+    font-size: 28px; /* Font size for center title */
+    background: whitesmoke; /* Gradient background */
+    -webkit-background-clip: text; /* Clips the background to the text */
+    color: transparent; /* Makes the text color transparent */
+    font-weight: bold; /* Bold text */
+}
+
+.header .logout {
+    background-color: #1E73A7; /* Use the color instead of the image */
+    color: rgba(255, 255, 255, 0.8); /* Text color for logout button */
+    border: none; /* No border for button */
+    padding: 10px 20px; /* Padding inside button */
+    border-radius: 20px; /* Rounded corners for button */
+    cursor: pointer; /* Pointer cursor for button */
+    font-size: 14px; /* Font size for button text */
+    transition: background-color 0.3s, transform 0.3s; /* Transition effects */
+}
+
+.header .logout:hover {
+    background-color: #5561e7; /* Background color on hover for logout button */
+    transform: scale(1.05); /* Slightly scales the button on hover */
+}
+
+/* Inhalt */
+.content {
+    display: flex;
+    flex-direction: column; /* Flex column layout */
+    align-items: flex-start; /* Align items to the start */
+    padding: 20px; /* Padding inside content */
+    background-color: #ffffffa8; /* Background color for content */
+    border-radius: 20px; /* Rounded corners for content */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Shadow effect for content */
+}
+/* Table */
+.table-section {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 15px;
+    border: 1px solid #ccc;
+    text-align: center;
+    background-color: #fafafa;
+}
+
+th {
+    background: url('/images/logout-button.jpg');
+    color: white;
+    font-weight: bold;
+}
+
+td {
+    transition: background-color 0.2s;
+}
+
+td:hover {
+    background-color: #eaeaea;
+}
+
+/* Calendar Container */
+.calendar-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 0;             /* Remove extra padding */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;            /* Ensure full width */
+    max-width: none;        /* Remove any max-width restriction */
+    margin: auto;         /* Center the container */
+    display: flex;          /* Use flex for layout */
+    justify-content: flex-start;  /* Align items to the left */
+    align-items: flex-start;      /* Align items to the top */
+}
+
+/* Kalendergröße reduzieren */
+.fc {
+    width: 60%;            /* Use full available width */
+    max-width: 60%;        /* Ensure no width restrictions */
+    height: auto;           /* Auto height for responsiveness */
+    margin: 0;              /* Remove any extra margins */
+    padding: 0;             /* Remove any extra padding */
+    overflow: hidden;       /* Hide any overflow */
+}
+
+/* Calendar Wrapper */
+.calendar {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;          /* Remove top margin to avoid extra space */
+}
+
+/* Calendar Header */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+}
+
+/* Calendar Days Grid */
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Calendar Day */
+.calendar-day {
+    padding: 10px;
+    background-color: #fafafa;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.2s;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.calendar-day:hover {
+    background-color: #002f6c;
+    color: white;
+    transform: scale(1.05);
+}
+
+.calendar-day.current {
+    background-color: #e52e71;
+    color: white;
+    font-weight: bold;
+}
+
+/* Optional: Calendar Detail Box */
+#todo-details {
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    width: 300px; /* Adjust the width */
+    position: fixed; /* Keeps it fixed in the viewport */
+    top: 50%; /* Position it vertically at the center */
+    right: 20px; /* Position it 20px from the right */
+    transform: translateY(-50%); /* Adjusts to truly center it vertically */
+    z-index: 1000; /* Ensures it stays above other elements */
+}
+
+
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .header {
+        padding: 10px;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .header .center-title {
+        font-size: 24px;
+    }
+
+    .header .logout {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    .content {
+        padding: 10px;
+    }
+
+    .table-section,
+    .calendar-section {
+        width: 100%;
+        padding: 5px;
+    }
+
+    .calendar-container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .calendar-header {
+        font-size: 1em;
+    }
+
+    .calendar-day {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    .calendar-days {
+        gap: 3px;
+    }
+}

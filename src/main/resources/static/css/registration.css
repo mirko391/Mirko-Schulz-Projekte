@@ -1,0 +1,119 @@
+body {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('/images/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.registration-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-image: url('/images/sidebar.jpg');
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    background: linear-gradient(45deg, #002fff, #211453);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.registration-box {
+    background-color: #fff;
+    padding: 40px;
+    max-width: 300px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 0 auto;
+}
+
+.center-title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 28px;
+    background: linear-gradient(45deg, #002fff, #211453);
+    -webkit-background-clip: text;
+    color: transparent;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.input-container {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 0; /* Ensure no extra padding in the input container */
+}
+
+.input-container label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.input-container input {
+    width: 100%; /* Full width of its container */
+    padding: 12px 20px; /* Match padding with buttons */
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box; /* Includes padding and border in width calculation */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-container input:focus {
+    border-color: #002fff;
+    box-shadow: 0 0 8px rgba(0, 47, 255, 0.5);
+}
+
+/* Ensure buttons and inputs are identical in width and padding */
+button, .button {
+    width: 100%; /* Full width */
+    padding: 12px 20px; /* Same padding as inputs */
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background: #1E73A7;
+    color: white;
+    box-sizing: border-box; /* Include padding in width calculation */
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+button:hover, .button:hover {
+    background-color: #001ccc;
+}
+
+.success-message, .error-message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+}

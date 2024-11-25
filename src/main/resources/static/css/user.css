@@ -1,0 +1,311 @@
+/* User Info Style */
+.user-info {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #ffffffa8;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 500px;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column; /* Align contents vertically */
+    height: 100%; /* Ensure same height as the sibling */
+    flex-grow: 1; /* Make the container grow to fill available space */
+}
+
+.user-form-container {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 10px solid transparent; /* No solid color, just transparent border */
+    border-image: url('/images/sidebar.jpg') 30 stretch; /* Use border image */
+    border-radius: 20px; /* Border radius for rounded corners */
+    background-color: #ffffffa8;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    height: 100%;
+    flex-grow: 1;
+    overflow: hidden; /* Ensures content doesn't overflow rounded edges */
+    box-sizing: border-box; /* Ensures padding is included in total width */
+    }
+}
+
+.user-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.user-form input {
+    padding: 10px;
+    border: 2px solid #1E73A7;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s;
+    width: 80%;
+}
+
+.user-form input:focus {
+    border-color: #001ccc;
+}
+
+.user-form .input-container {
+    margin-bottom: 15px;
+}
+
+.user-form button {
+    background-color: #1E73A7;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.user-form button:hover {
+    background-color: #001ccc;
+}
+
+/* Layout for user-info and user-form */
+.user-container {
+    display: flex;
+    justify-content: space-between; /* Space between the two containers */
+    align-items: stretch;
+    gap: 20px; /* Adjust space between the containers */
+    padding: 20px;
+
+
+}
+
+/* Body Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    background: url('/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    height: 80vh;
+    width: 240px;
+    background: url('/images/sidebar.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-top: 40px;
+    padding: 20px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    margin: 40px 0;
+}
+
+.sidebar .logo {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.sidebar .logo img {
+    width: 60%;
+}
+
+.sidebar h3 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.sidebar a {
+    padding: 12px 15px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    display: block;
+    transition: background-color 0.3s, padding-left 0.3s;
+    border-radius: 10px;
+    margin: 5px 0;
+    position: relative;
+}
+
+.sidebar a:not(:last-child)::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 5px;
+}
+
+.sidebar a:hover {
+    background-color: #4A5568;
+    padding-left: 25px;
+}
+
+/* Main Content Styles */
+.main-content {
+    margin-left: 260px;
+    padding: 40px;
+    max-width: calc(100% - 240px);
+    background-color: #ffffffa8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+}
+
+/* Header Styles */
+.header {
+    background: url('/images/sidebar.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    font-size: 24px;
+    color: #333;
+    margin-right: auto;
+}
+
+.header .title-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.header .center-title {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 28px;
+    background: whitesmoke;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-weight: bold;
+}
+
+.header .logout {
+    background-color: #1E73A7; /* Use the color instead of the image */
+    color: rgba(255, 255, 255, 0.8);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.header .logout:hover {
+    background-color: #5561e7;
+    transform: scale(1.05);
+}
+
+/* Content Section */
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #ffffffa8;
+    border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Section */
+.table-section {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 15px;
+    border: 1px solid #ccc;
+    text-align: center;
+    background-color: #fafafa;
+}
+
+th {
+    background: url('/images/logout-button.jpg');
+    color: white;
+    font-weight: bold;
+}
+
+td {
+    transition: background-color 0.2s;
+}
+
+td:hover {
+    background-color: #eaeaea;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .header {
+        padding: 10px;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .header .center-title {
+        font-size: 24px;
+    }
+
+    .header .logout {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    .content {
+        padding: 10px;
+    }
+
+    .table-section, .calendar-section {
+        width: 100%;
+    }
+}

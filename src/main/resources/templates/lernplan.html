@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lernpläne</title>
+    <link rel="stylesheet" th:href="@{/css/lernplan.css}">
+</head>
+<body>
+<div class="sidebar">
+    <div class="logo">
+        <img th:src="@{/images/mischok@cademy.png}" alt="Logo" class="logo-image" src="">
+    </div>
+    <h3><a th:text="#{menu.menu}">"Menü</a></h3>
+    <a th:href="@{/dashboard}" class="menu-link" th:text="#{menu.home}">>Dashboard</a>
+    <a th:href="@{/kalendar}" class="menu-link" th:text="#{menu.kalender}">Kalender</a>
+    <a th:href="@{/uebersicht}" class="menu-link" th:text="#{menu.uebersicht}">Übersicht</a>
+    <a th:href="@{/lernplan}" class="menu-link" th:text="#{menu.lernplan}">Lernplan</a>
+    <a th:href="@{/projekt}" class="menu-link" th:text="#{menu.projekt}">Projekt</a>
+    <a th:href="@{/user}" class="menu-link" th:text="#{menu.user}">User</a>
+</div>
+
+<div class="main-content">
+    <div class="header">
+        <div class="title-container">
+            <div class="center-title"><a th:text="#{cal.lern}">Lernpläne</a></div>
+        </div>
+
+        <form action="/lernplan" method="get">
+            <select name="lang" onchange="this.form.submit()">
+                <option value="de" th:selected="${#locale.language == 'de'}">Deutsch</option>
+                <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+                <option value="hr" th:selected="${#locale.language == 'hr'}">Kroatisch</option>
+                <option value="uk" th:selected="${#locale.language == 'uk'}">Ukrainisch</option>
+            </select>
+        </form>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout">Logout</button>
+        </form>
+    </div>
+
+    <div class="content">
+        <table>
+            <thead>
+            <tr>
+                <th><a th:text="#{cal.title}">Titel</th>
+                <th><a th:text="#{cal.start}">Start</th>
+                <th><a th:text="#{cal.end}">Ende</th>
+                <th><a th:text="#{dash.act}">Aktionen</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- New row for creating a new Lernplan -->
+            <tr>
+                <form th:action="@{/lernplan/create}" method="post">
+                    <td><input type="text" name="titel" placeholder="Titel" required></td>
+                    <td><input type="date" name="start" required></td>
+                    <td><input type="date" name="ende" required></td>
+
+                    <!-- No dropdown for selecting personId -->
+
+                    <td><button type="submit"><a th:text="#{lern.create}">Erstellen</a></button></td>
+                </form>
+            </tr>
+
+            <!-- Existing Lernpläne display rows -->
+            <tr th:each="lernplan : ${lernplaene}">
+                <td th:text="${lernplan.titel}"></td>
+                <td th:text="${lernplan.start}"></td>
+                <td th:text="${lernplan.ende}"></td>
+                <td>
+                    <a th:href="@{/lernplan/{id}(id=${lernplan.lernplanId})}" th:text="#{dash.see}">Details</a> |
+                    <a th:href="@{/lernplan/edit/{id}(id=${lernplan.lernplanId})}" th:text="#{todo.edit}">Bearbeiten</a> |
+                    <a th:href="@{/lernplan/delete/{id}(id=${lernplan.lernplanId})}" th:text="#{todo.delete}">Löschen</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

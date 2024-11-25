@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link zur externen CSS-Datei -->
+    <link rel="stylesheet" th:href="@{/css/uebersicht.css}">
+</head>
+<body>
+<div class="sidebar">
+    <div class="logo">
+        <img th:src="@{/images/mischok@cademy.png}" alt="Logo" class="logo-image">
+    </div>
+    <h3><a th:text="#{menu.menu}">"Menü</a></h3>
+    <a th:href="@{/dashboard}" class="menu-link" th:text="#{menu.home}">>Dashboard</a>
+    <a th:href="@{/kalendar}" class="menu-link" th:text="#{menu.kalender}">Kalender</a>
+    <a th:href="@{/uebersicht}" class="menu-link" th:text="#{menu.uebersicht}">Übersicht</a>
+    <a th:href="@{/lernplan}" class="menu-link" th:text="#{menu.lernplan}">Lernplan</a>
+    <a th:href="@{/projekt}" class="menu-link" th:text="#{menu.projekt}">Projekt</a>
+    <a th:href="@{/user}" class="menu-link" th:text="#{menu.user}">User</a>
+</div>
+
+<div class="main-content">
+    <div class="header">
+        <div class="title-container">
+            <span class="center-title">ToDo Erstellen</span>
+        </div>
+
+        <form action="/uebersicht" method="get">
+            <select name="lang" onchange="this.form.submit()">
+                <option value="de" th:selected="${#locale.language == 'de'}">Deutsch</option>
+                <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+                <option value="hr" th:selected="${#locale.language == 'hr'}">Kroatisch</option>
+                <option value="uk" th:selected="${#locale.language == 'uk'}">Ukrainisch</option>
+            </select>
+        </form>
+
+        <!-- Logout button -->
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout">Logout</button>
+        </form>
+    </div>
+
+    <section class="content">
+        <form th:action="@{/todos}" method="post" class="todo-form">
+            <!-- CSRF-Token als verstecktes Eingabefeld -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <label for="titel">Titel:</label>
+            <input type="text" id="titel" name="titel" required><br>
+
+            <label for="beschreibung">Beschreibung:</label>
+            <textarea id="beschreibung" name="beschreibung"></textarea><br>
+
+            <!-- Startdatum -->
+            <label for="start">Startdatum:</label>
+            <input type="date" id="start" name="start" required><br>
+
+            <label for="ende">Fälligkeitsdatum:</label>
+            <input type="date" id="ende" name="ende"><br>
+
+            <!-- Lernplan-Auswahl -->
+            <div id="lernplanSection">
+                <label for="lehrplanId">Lernplan:</label>
+                <select id="lehrplanId" name="lehrplanId">
+                    <option th:each="lernplan : ${lernplaene}" th:value="${lernplan.lernplanId}"
+                            th:text="${lernplan.titel}"></option>
+                </select><br>
+            </div>
+
+            <!-- Projekt-Auswahl -->
+            <div id="projektSection">
+                <label for="projektid">Projekt:</label>
+                <select id="projektid" name="projektid">
+                    <option th:each="projekt : ${projekte}" th:value="${projekt.projektId}"
+                            th:text="${projekt.titel}"></option>
+                </select><br>
+            </div>
+
+            <!-- Status-Auswahl -->
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="Offen">Offen</option>
+                <option value="In Bearbeitung">In Bearbeitung</option>
+                <option value="Abgeschlossen">Abgeschlossen</option>
+            </select><br>
+
+            <button type="submit" class="btn">Erstellen</button>
+        </form>
+    </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Fehler</title>
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+<body>
+<div class="errorBox">
+    <h1>Ein Fehler ist aufgetreten</h1>
+    <p>Leider ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut oder kontaktieren Sie den Support.</p>
+    <p th:text="${error}"></p>  <!-- Optional: Fehlerbeschreibung anzeigen -->
+    <p th:text="${message}"></p> <!-- Optional: Fehlermeldung anzeigen -->
+    <a th:href="@{/dashboard}">Zur Startseite</a>
+</div>
+</body>
+</html>

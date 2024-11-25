@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lernplan Bearbeiten</title>
+  <link rel="stylesheet" th:href="@{/css/lernplan.css}">
+</head>
+<body>
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="logo">
+    <img th:src="@{/images/mischok@cademy.png}" alt="Logo" class="logo-image" src="">
+  </div>
+  <h3><a th:text="#{menu.menu}">Menü</a></h3>
+  <a th:href="@{/dashboard}" class="menu-link" th:text="#{menu.home}">Dashboard</a>
+  <a th:href="@{/kalendar}" class="menu-link" th:text="#{menu.kalender}">Kalender</a>
+  <a th:href="@{/uebersicht}" class="menu-link" th:text="#{menu.uebersicht}">Übersicht</a>
+  <a th:href="@{/lernplan}" class="menu-link" th:text="#{menu.lernplan}">Lernplan</a>
+  <a th:href="@{/projekt}" class="menu-link" th:text="#{menu.projekt}">Projekt</a>
+  <a th:href="@{/user}" class="menu-link" th:text="#{menu.user}">User</a>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="title-container">
+    <div class="center-title"><a th:text="#{lern.edit}">Lernpläne</a></div>
+  </div>
+
+  <form th:action="@{/lernplan/edit/{id}(id=${id})}"  method="get">
+    <select name="lang" onchange="this.form.submit()">
+      <option value="de" th:selected="${#locale.language == 'de'}">Deutsch</option>
+      <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+      <option value="hr" th:selected="${#locale.language == 'hr'}">Kroatisch</option>
+      <option value="uk" th:selected="${#locale.language == 'uk'}">Ukrainisch</option>
+    </select>
+  </form>
+
+  <!-- Logout Button -->
+  <form th:action="@{/logout}" method="post">
+    <button type="submit" class="logout">Logout</button>
+  </form>
+</div>
+
+<!-- Main Content -->
+<!-- Form -->
+<div class="form-container">
+  <h2></h2>
+
+  <!-- Error Message -->
+  <div class="error-message" th:if="${error}">
+    <p th:text="${error}">Es gibt Fehler im Formular. Bitte überprüfen Sie die Eingaben.</p>
+    <button class="close-btn" type="button" onclick="this.closest('.error-message').style.display='none'">&times;</button>
+  </div>
+
+  <form th:action="@{/lernplan/edit/{id}(id=${id})}" method="post">
+    <label for="titel">Titel:</label>
+    <input type="text" id="titel" name="titel" th:value="${lernplan.titel}" required>
+
+    <label for="start">Startdatum:</label>
+    <input type="date" id="start" name="start" th:value="${lernplan.start}" required>
+
+    <label for="ende">Endedatum:</label>
+    <input type="date" id="ende" name="ende" th:value="${lernplan.ende}" required>
+
+    <button type="submit">Speichern</button>
+    <a th:href="@{/lernplan}" class="cancel-button">Abbrechen</a>
+  </form>
+</div>
+
+
+</body>
+</html>

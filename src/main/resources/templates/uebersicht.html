@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Übersicht</title>
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" th:href="@{/css/uebersicht.css}">
+</head>
+<body>
+<!-- Sidebar on the left -->
+<div class="sidebar">
+    <div class="logo">
+        <img th:src="@{/images/mischok@cademy.png}" alt="Logo" class="logo-image">
+    </div>
+    <h3><a th:text="#{menu.menu}">"Menü</a></h3>
+    <a th:href="@{/dashboard}" class="menu-link" th:text="#{menu.home}">>Dashboard</a>
+    <a th:href="@{/kalendar}" class="menu-link" th:text="#{menu.kalender}">Kalender</a>
+    <a th:href="@{/uebersicht}" class="menu-link" th:text="#{menu.uebersicht}">Übersicht</a>
+    <a th:href="@{/lernplan}" class="menu-link" th:text="#{menu.lernplan}">Lernplan</a>
+    <a th:href="@{/projekt}" class="menu-link" th:text="#{menu.projekt}">Projekt</a>
+    <a th:href="@{/user}" class="menu-link" th:text="#{menu.user}">User</a>
+</div>
+<div class="main-content">
+    <div class="header">
+        <h1></h1> <!-- Header updated to Kalendar -->
+        <div class="title-container">
+            <div class="center-title"><a th:text="#{menu.uebersicht}">Übersicht</a></div> <!-- Center title updated to Kalendar -->
+        </div>
+
+        <form action="/uebersicht" method="get">
+            <select name="lang" onchange="this.form.submit()">
+                <option value="de" th:selected="${#locale.language == 'de'}">Deutsch</option>
+                <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+                <option value="hr" th:selected="${#locale.language == 'hr'}">Kroatisch</option>
+                <option value="uk" th:selected="${#locale.language == 'uk'}">Ukrainisch</option>
+            </select>
+        </form>
+
+        <!-- Logout button -->
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout">Logout</button>
+        </form>
+    </div>
+
+    <!-- ToDo Übersicht Section -->
+    <section>
+        <h2><a th:text="#{todo.header}"></a></h2>
+
+        <a th:href="@{/todos/new}" class="btn" th:text="#{cal.new}">Neues ToDo erstellen</a>
+
+        <table>
+            <thead>
+            <tr>
+                <th><a th:href="@{|/uebersicht?page=${currentPage}&sortBy=titel&sortOrder=${sortOrder == 'asc' && sortBy == 'titel' ? 'desc' : 'asc'}|}" th:text="#{cal.title}">Titel</a></th>
+                <th><a th:href="@{|/uebersicht?page=${currentPage}&sortBy=beschreibung&sortOrder=${sortOrder == 'asc' && sortBy == 'beschreibung' ? 'desc' : 'asc'}|}" th:text="#{dash.disc}">Beschreibung</a></th>
+                <th><a th:href="@{|/uebersicht?page=${currentPage}&sortBy=lehrplanId&sortOrder=${sortOrder == 'asc' && sortBy == 'lehrplanId' ? 'desc' : 'asc'}|}" th:text="#{cal.lern}">Lernplan</a></th>
+                <th><a th:href="@{|/uebersicht?page=${currentPage}&sortBy=projektId&sortOrder=${sortOrder == 'asc' && sortBy == 'projektId' ? 'desc' : 'asc'}|}" th:text="#{cal.project}">Projekt</a></th>
+                <th><a th:href="@{|/uebersicht?page=${currentPage}&sortBy=start&sortOrder=${sortOrder == 'asc' && sortBy == 'start' ? 'desc' : 'asc'}|}" th:text="#{cal.start}" >Startdatum</a></th>
+                <th><a th:href="@{|/uebersicht?page=${currentPage}&sortBy=ende&sortOrder=${sortOrder == 'asc' && sortBy == 'ende' ? 'desc' : 'asc'}|}" th:text="#{cal.end}">Fälligkeitsdatum</a></th>
+                <th><a th:href="@{|/uebersicht?page=${currentPage}&sortBy=status&sortOrder=${sortOrder == 'asc' && sortBy == 'status' ? 'desc' : 'asc'}|}" th:text="#{cal.status}">Status</a></th>
+                <th><a th:text="#{dash.act}">Aktionen</a></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="todo : ${todos}">
+                <td th:text="${todo.titel}"></td>
+                <td th:text="${todo.beschreibung}"></td>
+                <td th:text="${todo.lehrplanId != null ? lernplanTitelMap[todo.lehrplanId] : '—'}"></td>
+                <td th:text="${todo.projektId != null ? projektTitelMap[todo.projektId] : '—'}"></td>
+                <td th:text="${#temporals.format(todo.start, 'dd.MM.yyyy')}"></td>
+                <td th:text="${#temporals.format(todo.ende, 'dd.MM.yyyy')}"></td>
+                <td th:text="${todo.status}"></td>
+                <td>
+                    <a th:href="@{|/todos/${todo.todoId}|}" class="btn" th:text="#{dash.see}">Ansehen</a>
+                    <a th:href="@{|/todos/${todo.todoId}/edit|}" class="btn" th:text="#{todo.edit}">Bearbeiten</a>
+                    <form th:action="@{|/todos/${todo.todoId}/delete|}" method="post" style="display:inline;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn" th:text="#{todo.delete}">Löschen</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${currentPage != null}">
+            <p><a th:text="#{todo.page}">Seite:</a><span th:text="${currentPage + 1}"></span> <a th:text="#{todo.of}">von</a><span th:text="${totalPages}"></span></p>
+        </div>
+
+        <div class="pagination">
+            <a th:href="@{|/uebersicht?page=${currentPage - 1}&sortBy=${sortBy}&sortOrder=${sortOrder}|}"
+               th:if="${currentPage != null and currentPage > 0}" th:text="#{todo.back}">Zurück</a>
+            <a th:href="@{|/uebersicht?page=${currentPage + 1}&sortBy=${sortBy}&sortOrder=${sortOrder}|}"
+               th:if="${currentPage != null and totalPages != null and currentPage < totalPages - 1}" th:text="#{todo.next}">Weiter</a>
+        </div>
+    </section>
+</div>
+</body>
+</html>

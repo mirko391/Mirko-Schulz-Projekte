@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo Details</title>
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" th:href="@{/css/viewTodo.css}">
+</head>
+<body>
+<!-- Sidebar on the left -->
+<div class="sidebar">
+  <div class="logo">
+    <img th:src="@{/images/mischok@cademy.png}" alt="Logo" class="logo-image">
+  </div>
+  <h3><a th:text="#{menu.menu}">Menü</a></h3>
+  <nav>
+    <a th:href="@{/dashboard}" class="menu-link" th:text="#{menu.home}">Startseite</a>
+    <a th:href="@{/kalendar}" class="menu-link" th:text="#{menu.kalender}">Kalender</a>
+    <a th:href="@{/uebersicht}" class="menu-link" th:text="#{menu.uebersicht}">Übersicht</a>
+    <a th:href="@{/lernplan}" class="menu-link" th:text="#{menu.lernplan}">Lernplan</a>
+    <a th:href="@{/projekt}" class="menu-link" th:text="#{menu.projekt}">Projekt</a>
+    <a th:href="@{/user}" class="menu-link" th:text="#{menu.user}">User</a>
+  </nav>
+</div>
+
+<div class="main-content">
+  <header class="header">
+    <div class="title-container">
+      <h1>Neues Todo erstellen</h1>
+    </div>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="logout">Logout</button>
+    </form>
+  </header>
+
+  <!-- Todo Detail Section -->
+  <section>
+    <h2>Todo Informationen</h2>
+    <div class="project-details">
+      <!-- Titel -->
+      <div class="detail-item">
+        <strong>Titel:</strong>
+        <p><span th:text="${todo.titel}"></span></p>
+      </div>
+
+      <!-- Beschreibung -->
+      <div class="detail-item">
+        <strong>Beschreibung:</strong>
+        <p><span th:text="${todo.beschreibung}"></span></p>
+      </div>
+
+      <!-- Startdatum -->
+      <div class="detail-item">
+        <strong>Startdatum:</strong>
+        <p><span th:text="${#temporals.format(todo.start, 'dd.MM.yyyy')}"></span></p>
+      </div>
+
+      <!-- Fälligkeitsdatum -->
+      <div class="detail-item">
+        <strong>Fälligkeitsdatum:</strong>
+        <p><span th:text="${#temporals.format(todo.ende, 'dd.MM.yyyy')}"></span></p>
+      </div>
+
+
+
+      <!-- Lernplan -->
+      <div class="detail-item">
+        <strong>Lernplan:</strong>
+        <p><span th:text="${lernplanTitelMap[todo.lehrplanId] != null ? lernplanTitelMap[todo.lehrplanId] : 'Kein Lernplan'}"></span></p>
+      </div>
+
+      <!-- Projekt -->
+      <div class="detail-item">
+        <strong>Projekt:</strong>
+        <p><span th:text="${projektTitelMap.get(todo.projektId) != null ? projektTitelMap.get(todo.projektId) : 'Kein Projekt'}"></span></p>
+      </div>
+
+      <!-- Status -->
+      <div class="detail-item">
+        <strong>Status:</strong>
+        <p><span th:text="${todo.status}"></span></p>
+      </div>
+    </div>
+    <a th:href="@{/uebersicht}" class="btn">Zurück zur Übersicht</a>
+  </section>
+</div>
+</body>
+</html>

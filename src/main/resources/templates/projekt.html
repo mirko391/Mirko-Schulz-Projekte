@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt</title>
+    <link rel="stylesheet" th:href="@{/css/projekt.css}">
+    <style>
+        /* Flex styling for project list items */
+        .project-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        .todo-dropdown {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: none; /* Initial versteckt */
+}
+
+.project-item {
+    flex-direction: column; /* Vertikale Ausrichtung */
+    align-items: flex-start; /* Startet am linken Rand */
+}
+
+.todo-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.todo-dropdown li {
+    margin-bottom: 5px;
+}
+        .project-info {
+            flex: 2;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        .action-buttons form,
+        .action-buttons button {
+            margin: 0;
+        }
+
+        /* Styling for modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="logo">
+        <img th:src="@{/images/mischok@cademy.png}" alt="Logo" class="logo-image">
+    </div>
+    <h3><a th:text="#{menu.menu}">"Menü</a></h3>
+    <a th:href="@{/dashboard}" class="menu-link" th:text="#{menu.home}">Dashboard</a>
+    <a th:href="@{/kalendar}" class="menu-link" th:text="#{menu.kalender}">Kalender</a>
+    <a th:href="@{/uebersicht}" class="menu-link" th:text="#{menu.uebersicht}">Übersicht</a>
+    <a th:href="@{/lernplan}" class="menu-link" th:text="#{menu.lernplan}">Lernplan</a>
+    <a th:href="@{/projekt}" class="menu-link" th:text="#{menu.projekt}">Projekt</a>
+    <a th:href="@{/user}" class="menu-link" th:text="#{menu.user}">User</a>
+</div>
+
+<div class="main-content">
+    <div class="header">
+        <div class="title-container">
+            <div class="center-title">Meine Projekte</div>
+        </div>
+
+        <form action="/projekt" method="get">
+            <select name="lang" onchange="this.form.submit()">
+                <option value="de" th:selected="${#locale.language == 'de'}">Deutsch</option>
+                <option value="en" th:selected="${#locale.language == 'en'}">English</option>
+                <option value="hr" th:selected="${#locale.language == 'hr'}">Kroatisch</option>
+                <option value="uk" th:selected="${#locale.language == 'uk'}">Ukrainisch</option>
+            </select>
+        </form>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout">Logout</button>
+        </form>
+    </div>
+
+    <!-- Abschnitt zur Erstellung eines neuen Projekts -->
+    <div class="create-project-form">
+        <h3>Neues Projekt erstellen</h3>
+        <form th:action="@{/projekt/create}" method="post">
+            <label for="titel">Projekttitel:</label>
+            <input type="text" id="titel" name="titel" placeholder="Titel des Projekts eingeben" required />
+
+            <label for="beschreibung">Projektbeschreibung:</label>
+            <textarea id="beschreibung" name="beschreibung" placeholder="Beschreibung des Projekts eingeben" rows="1" required></textarea>
+
+            <button type="submit">Projekt erstellen</button>
+        </form>
+    </div>
+
+    <!-- Projekte mit Mitglieder anzeigen -->
+    <div class="project-list">
+        <h2>Eigene Projekte (Anzahl: <span th:text="${#lists.size(ownedProjects)}">0</span>)</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Projekttitel</th>
+                <th>Aktionen</th>
+                <th>To-dos</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="projekt : ${ownedProjects}">
+                <!-- Projekttitel -->
+                <td>
+                    <span th:text="${projekt.titel}">Projektname</span>
+                </td>
+
+                <!-- Aktionen -->
+                <td>
+                    <div class="action-buttons">
+                        <!-- Mitglieder anzeigen -->
+                        <button type="button" th:onclick="'openModal(' + ${projekt.projektId} + ')'">
+                            Mitglieder anzeigen
+                        </button>
+
+                        <!-- Benutzer hinzufügen -->
+                        <form th:action="@{/projekt/addMember}" method="post" style="display: inline;">
+                            <input type="hidden" name="projektid" th:value="${projekt.projektId}" />
+                            <input type="text" name="username" placeholder="Benutzername hinzufügen" required />
+                            <button type="submit">Hinzufügen</button>
+                        </form>
+
+                        <!-- Projekt löschen -->
+                        <form th:action="@{/projekt/delete}" method="post" style="display: inline;">
+                            <input type="hidden" name="projektid" th:value="${projekt.projektId}" />
+                            <button type="submit" onclick="return confirm('Projekt wirklich löschen?');">Löschen</button>
+                        </form>
+                    </div>
+                </td>
+
+                <!-- To-dos mit Zuweisungsformular -->
+                <td>
+                    <button type="button" th:onclick="'toggleDropdown(\'todo-dropdown-' + ${projekt.projektId} + '\')'">
+                        To-dos anzeigen
+                    </button>
+                    <div th:id="'todo-dropdown-' + ${projekt.projektId}" class="todo-dropdown" style="display: none;">
+                        <ul id="todo-list" th:id="'todo-list-' + ${projekt.projektId}">
+                            <li th:each="todo : ${projekt.todos}">
+                                <!-- To-do Titel -->
+                                <div class="todo-item">
+                                    <span th:text="${todo.titel}">To-do Titel</span>
+                                </div>
+
+                                <!-- Zugewiesene Person -->
+                                <div class="todo-item">
+                                    <span>Zugewiesene Person: </span>
+                                    <span th:text="${todo.personName ?: 'Nicht zugewiesen'}">Zugewiesene Person</span>
+                                </div>
+
+                                <!-- Formular zum Zuweisen einer neuen Person -->
+                                <form th:action="@{/projekt/updateTodoPerson}" method="post">
+                                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                                    <input type="hidden" name="todoId" th:value="${todo.todoId ?: 0}" />
+                                    <input type="text" name="personName" placeholder="Neue Person zuweisen" />
+                                    <button type="submit">Person zuweisen</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal für Mitgliederanzeige -->
+    <div th:each="projekt : ${ownedProjects}" th:id="'modal-' + ${projekt.projektId}" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" th:onclick="'closeModal(' + ${projekt.projektId} + ')'">&times;</span>
+            <h3>Mitglieder von <span th:text="${projekt.titel}">Projektname</span></h3>
+            <ul>
+                <li th:each="person : ${projekt.personen}">
+                    <span th:text="${person.username}">Mitglied</span>
+                    <!-- Entfernen des Mitglieds -->
+                    <form th:action="@{/projekt/removeMember}" method="post" style="display: inline;">
+                        <input type="hidden" name="projektid" th:value="${projekt.projektId}" />
+                        <input type="hidden" name="memberid" th:value="${person.personid}" />
+                        <button type="submit" onclick="return confirm('Möchten Sie ' + '[[${person.username}]]' + ' wirklich aus dem Projekt entfernen?');">Entfernen</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Projekte als Teilnehmer -->
+        <h3>Projekte als Teilnehmer (Anzahl: <span th:text="${#lists.size(participantProjects)}">0</span>)</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Projekttitel</th>
+                <th>Aktionen</th>
+                <th>To-dos</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="projekt : ${participantProjects}">
+                <!-- Hauptprojektzeile -->
+                <td>
+                    <span th:text="${projekt.titel}">Projektname</span>
+                </td>
+
+                <!-- Aktion: Teilnehmer austragen -->
+                <td>
+                    <form th:action="@{/projekt/removeParticipant}" method="post" style="display: inline;">
+                        <input type="hidden" name="projektid" th:value="${projekt.projektId}" />
+                        <button class="btn btn-danger" type="submit"
+                                onclick="return confirm('Möchten Sie sich wirklich aus diesem Projekt austragen?');">Austragen</button>
+                    </form>
+                </td>
+
+                <!-- To-dos anzeigen -->
+                <td>
+                    <button class="btn btn-info" type="button"
+                            th:onclick="'toggleTodos(' + ${projekt.projektId} + ')'">To-dos anzeigen</button>
+                </td>
+            </tr>
+
+            <!-- Eingebettete Tabelle für To-dos -->
+            <tr th:each="projekt : ${participantProjects}" th:id="'todo-row-' + ${projekt.projektId}" style="display: none;">
+                <td colspan="3">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>To-do Titel</th>
+                            <th>Beschreibung</th>
+                            <th>Zugewiesene Person</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="todo : ${projekt.todos}">
+                            <td>
+                                <span th:text="${todo.titel}">To-do Titel</span>
+                            </td>
+                            <td>
+                                <span th:text="${todo.beschreibung}">To-do Beschreibung</span>
+                            </td>
+                            <td>
+                                <span th:text="${todo.personName ?: 'Nicht zugewiesen'}">Zugewiesene Person</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Funktion: Dropdown für To-dos ein- und ausblenden
+        function toggleDropdown(id) {
+            const element = document.getElementById(id);
+            if (element.style.display === "none" || element.style.display === "") {
+                element.style.display = "table-row";
+            } else {
+                element.style.display = "none";
+            }
+        }
+    </script>
+    <script>
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            if (dropdown.style.display === "none") {
+                dropdown.style.display = "block";
+            } else {
+                dropdown.style.display = "none";
+            }
+        }
+    </script>
+    <script>
+        function loadTodos(projektId) {
+    const dropdown = document.getElementById(`todo-dropdown-${projektId}`);
+    const todoList = document.getElementById(`todo-list-${projektId}`);
+
+    // Toggle visibility
+    if (dropdown.style.display === "none") {
+        dropdown.style.display = "block";
+
+        // Check if To-dos are already loaded
+        if (todoList.innerHTML.trim() === "") {
+            fetch(`/projekt/todos?projektid=${projektId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to load todos");
+                    }
+                    return response.json();
+                })
+                .then(todos => {
+                    todoList.innerHTML = todos
+                        .map(
+                            todo =>
+                                `<li>
+                                    <span>${todo.titel}</span>
+                                    <span>${todo.beschreibung}</span>
+                                </li>`
+                        )
+                        .join("");
+                })
+                .catch(error => console.error("Error loading todos:", error));
+        }
+    } else {
+        dropdown.style.display = "none";
+    }
+}
+
+
+
+         function openModal(projektid) {
+             const modal = document.getElementById("modal-" + projektid);
+             if (modal) {
+                 modal.style.display = "block";
+             } else {
+                 console.error("Modal nicht gefunden für Projekt ID:", projektid);
+             }
+         }
+
+         function closeModal(projektid) {
+             const modal = document.getElementById("modal-" + projektid);
+             if (modal) {
+                 modal.style.display = "none";
+             } else {
+                 console.error("Modal nicht gefunden für Projekt ID:", projektid);
+             }
+         }
+
+         // Schließe Modal beim Klicken außerhalb
+         window.onclick = function (event) {
+             const modals = document.querySelectorAll(".modal");
+             modals.forEach((modal) => {
+                 if (event.target === modal) {
+                     modal.style.display = "none";
+                 }
+             });
+         };
+    </script>
+    <script>
+        function toggleTodos(projektId) {
+            const todoRow = document.getElementById(`todo-row-${projektId}`);
+
+            if (todoRow.style.display === "none" || todoRow.style.display === "") {
+                // Zeige die To-do-Zeile an
+                todoRow.style.display = "table-row";
+            } else {
+                // Verstecke die To-do-Zeile
+                todoRow.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
+
+
